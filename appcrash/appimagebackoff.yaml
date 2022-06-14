@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-crash2
+spec:
+  selector:
+    matchLabels:
+      app: app-crash2
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: app-crash2
+    spec:
+      containers:
+        - name: app-crash2
+          image: thisimagewillneverbefound:latest
+

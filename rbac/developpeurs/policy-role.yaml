@@ -1,0 +1,135 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: role-superproject-developpeurs
+  namespace: my-policies
+  annotations:
+    policy.open-cluster-management.io/standards: NIST-CSF
+    policy.open-cluster-management.io/categories: PR.AC Identity Management Authentication and Access Control
+    policy.open-cluster-management.io/controls: PR.AC-4 Access Control
+spec:
+  remediationAction: inform
+  disabled: false
+  policy-templates:
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: superproject
+        spec:
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: superproject
+
+          severity: high
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: policy-role-developpeurs
+        spec:
+          severity: high
+          object-templates:
+            - complianceType: mustonlyhave
+              objectDefinition:
+
+                apiVersion: rbac.authorization.k8s.io/v1
+                kind: Role
+                metadata:
+                  name: developpeurs
+                  namespace: superproject
+                rules:
+                - apiGroups:
+                  - ""
+                  resources:
+                  - secrets
+                  verbs:
+                  - list
+                - apiGroups:
+                  - ""
+                  resources:
+                  - namespaces
+                  verbs:
+                  - get
+                - apiGroups:
+                  - ""
+                  - project.openshift.io
+                  resources:
+                  - projects
+                  verbs:
+                  - get
+                - apiGroups:
+                  - ""
+                  resources:
+                  - pods
+                  verbs:
+                  - get
+                  - list
+                  - watch
+                - apiGroups:
+                  - apps
+                  resources:
+                  - controllerrevisions
+                  - daemonsets
+                  - daemonsets/status
+                  - deployments
+                  - deployments/scale
+                  - deployments/status
+                  - replicasets
+                  - replicasets/scale
+                  - replicasets/status
+                  - statefulsets
+                  - statefulsets/scale
+                  - statefulsets/status
+                  verbs:
+                  - get
+                  - list
+                  - watch
+                - apiGroups:
+                  - ""
+                  resources:
+                  - bindings
+                  - events
+                  - limitranges
+                  - namespaces/status
+                  - pods/log
+                  - pods/status
+                  - replicationcontrollers/status
+                  - resourcequotas
+                  - resourcequotas/status
+                  verbs:
+                  - get
+                  - list
+                  - watch
+
+    - objectDefinition:
+
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: policy-dev-demo4-rbac-prod-rolebinding
+        spec:
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+
+                kind: RoleBinding
+                apiVersion: rbac.authorization.k8s.io/v1
+                metadata:
+                  name: superproject-developpeurs
+                  namespace: superproject
+                subjects:
+                  - kind: Group
+                    apiGroup: rbac.authorization.k8s.io
+                    name: developpeurs
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: Role
+                  name: developpeurs

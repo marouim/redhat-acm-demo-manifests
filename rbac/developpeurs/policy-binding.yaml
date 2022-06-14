@@ -1,0 +1,15 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: binding-superproject-developpeurs
+  namespace: my-policies
+  
+placementRef:
+  name: placement-superproject
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+
+subjects:
+- name: role-superproject-developpeurs
+  kind: Policy
+  apiGroup: policy.open-cluster-management.io
