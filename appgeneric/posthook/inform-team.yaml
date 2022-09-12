@@ -1,0 +1,9 @@
+apiVersion: tower.ansible.com/v1alpha1
+kind: AnsibleJob
+metadata:
+  name: inform-team
+spec:
+  job_template_name: send slack
+  tower_auth_secret: tower-secret
+  extra_vars:
+    message: "APRES Deploiement application"
