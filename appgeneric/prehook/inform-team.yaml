@@ -3,7 +3,7 @@ kind: AnsibleJob
 metadata:
   name: inform-team
 spec:
-  job_template_name: send slack
+  job_template_name: send-slack-with-arg
   tower_auth_secret: tower-secret
   extra_vars:
     message: "AVANT Deploiement application"
