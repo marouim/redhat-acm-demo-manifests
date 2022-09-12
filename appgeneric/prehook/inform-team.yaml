@@ -1,7 +1,7 @@
 apiVersion: tower.ansible.com/v1alpha1
 kind: AnsibleJob
 metadata:
-  name: inform-team
+  name: before-inform-team
 spec:
   job_template_name: send-slack-with-arg
   tower_auth_secret: tower-secret
